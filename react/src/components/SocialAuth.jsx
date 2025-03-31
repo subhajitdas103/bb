@@ -69,8 +69,13 @@
         <GoogleIcon 
           className="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity" 
           onClick={handleGoogleClick}
-        />
-        
+        /> 
+      
+
+      <Facebook 
+          className="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity" 
+          onClick={handleGoogleClick}
+        /> 
       </div>
       
       <RoleSelectionDialog
