@@ -2,7 +2,41 @@
   import { Facebook } from "lucide-react";
   import axios from "axios";
   import { GoogleIcon } from "./icons/GoogleIcon";
+  import RoleSelectionDialog from "./RoleSelectionDialog";
+  import { useToast } from "@/components/ui/use-toast";
+
+  import React, { useState } from "react";
+ 
   const SocialAuth = () => {
+
+    const { toast } = useToast();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  
+  const handleGoogleClick = () => {
+    setDialogOpen(true);
+  };
+  
+  const handleRoleSelect = (role) => {
+    // Close the dialog
+    setDialogOpen(false);
+    
+    // Simulate authenticating with Google with the selected role
+    toast({
+      title: `Authenticating as ${role === "leader" ? "Group Leader" : "Group User"}`,
+      description: "Redirecting to Google authentication...",
+    });
+    
+    // This is where you would typically redirect to Google OAuth
+    // with the role stored in the session or as a URL parameter
+    console.log(`Selected role: ${role}`);
+       // Trigger Google login after role selection
+       loginWithGoogle();
+    // Simulate API request with a delay to show the toast
+    setTimeout(() => {
+      // In a real application, this would be handled by the OAuth callback
+      console.log("Google authentication completed");
+    }, 1500);
+  };
     const loginWithGoogle = useGoogleLogin({
       onSuccess: async (response) => {
         console.log("Google Login Success:", response);
@@ -30,25 +64,21 @@
     
 
     return (
-      <div className  ="flex justify-center space-x-4 mt-4">
-        <button
-          onClick={loginWithGoogle}
-          className="flex items-center space-x-2 p-2 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 transition"
-        >
-          <GoogleIcon className="w-6 h-6" />
-          {/* <span>Sign in with Google</span> */}
-        </button>
-
-
-        <button
-          onClick={loginWithGoogle}
-          className="flex items-center space-x-2 p-2 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 transition"
-        >
-          <Facebook className="w-6 h-6" />
-          {/* <span>Sign in with Google</span> */}
-        </button>
+      <>
+      <div className="flex justify-center space-x-4 mt-4">
+        <GoogleIcon 
+          className="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity" 
+          onClick={handleGoogleClick}
+        />
         
       </div>
+      
+      <RoleSelectionDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onRoleSelect={handleRoleSelect}
+      />
+    </>
     );
   };
 
