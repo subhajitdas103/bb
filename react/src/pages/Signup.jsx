@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import AuthLayout from "@/components/AuthLayout";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import SocialAuth from "@/components/SocialAuth";
+import axios from "axios";
 
 const SignUp = () => {
   const { toast } = useToast();
@@ -55,27 +56,20 @@ const SignUp = () => {
       return;
     }
 
+    console.log("Form Data:", formData); // Log form data
+
     try {
       setIsLoading(true);
 
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        body: JSON.stringify(formData),
+      const { data } = await axios.post("http://127.0.0.1:8000/api/signup", formData, {
         headers: { "Content-Type": "application/json" },
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Signup failed");
-      }
 
       toast({
         title: "Account Created",
         description: "You've successfully created your account!",
       });
 
-      window.location.href = formData.role === "group_leader" ? "/leader-dashboard" : "/user-dashboard";
     } catch (error) {
       toast({
         title: "Error Creating Account",

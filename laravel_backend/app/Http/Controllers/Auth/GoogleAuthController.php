@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
-use App\Models\User;
+use App\Models\SocialMediaUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 class GoogleAuthController extends Controller
@@ -32,13 +32,14 @@ class GoogleAuthController extends Controller
             }
         
             // Find or create user
-            $user = User::updateOrCreate(
+            $user = SocialMediaUsers::updateOrCreate(
                 ['email' => $googleUser['email']],
                 [
                     'name' => $googleUser['name'],
                     'google_id' => $googleUser['sub'],
                     'avatar' => $googleUser['picture'],
                     'password' => bcrypt(uniqid()),
+                    'user_type' => $request->input('user_type'),
                 ]
             );
         
