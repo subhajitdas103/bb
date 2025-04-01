@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import AuthLayout from "@/components/AuthLayout";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios"; // Import Axios
 import SocialAuth from "@/components/SocialAuth";
 
 const Login = () => {
@@ -44,8 +44,16 @@ const Login = () => {
     try {
       setIsLoading(true);
 
-      // Simulate API call with timeout
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Perform login via Axios
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Handle the response from backend (for example, storing the token in localStorage)
+      if (response.data.token) {
+        localStorage.setItem("auth_token", response.data.token);
+      }
 
       toast({
         title: "Welcome back",
@@ -53,7 +61,11 @@ const Login = () => {
       });
 
       // In a real app, you'd redirect or update state
+      // For example:
+      // navigate("/dashboard"); // or use React Router to redirect to another page
+
     } catch (error) {
+      console.error("Login error", error);
       toast({
         title: "Login failed",
         description: "Invalid email or password. Please try again.",

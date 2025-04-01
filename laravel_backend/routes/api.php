@@ -12,3 +12,4 @@ Route::post('google-login', [GoogleAuthController::class, 'handleGoogleLogin'])
 
 Route::post('/signup', [AuthController::class, 'userSignup']);
 
+Route::post('/login', [AuthController::class, 'userLogin']);

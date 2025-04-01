@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -34,6 +35,36 @@ class AuthController extends Controller
             'message' => 'User registered successfully',
             'user' => $user
         ], 201);
+    }
+
+
+     public function userLogin(Request $request)
+    {
+        // Validate the incoming data
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        // Check if the user exists
+        $user = User::where('email', $validated['email'])->first();
+
+        if (!$user || !Hash::check($validated['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+
+        // Create a new API token for the user
+        $token = $user->createToken('LoginToken')->plainTextToken;
+
+        // Log the successful login attempt
+        Log::info("User logged in: {$user->email}");
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ]);
     }
     
 }
