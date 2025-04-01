@@ -158,7 +158,7 @@ const Login = () => {
           </div>
         </div>
         
-        <SocialAuth />
+        <SocialAuth isSignup={false} />
       </div>
     </AuthLayout>
   );

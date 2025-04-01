@@ -6,13 +6,24 @@ import RoleSelectionDialog from "./RoleSelectionDialog";
 import { useToast } from "@/components/ui/use-toast";
 import React, { useState } from "react";
 
-const SocialAuth = () => {
+const SocialAuth = ({ isSignup }) => {
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");  // Store the selected role
 
+  // const handleGoogleClick = () => {
+  //   setDialogOpen(true);
+  // };
+
+  
   const handleGoogleClick = () => {
-    setDialogOpen(true);
+    if (isSignup) {
+      setDialogOpen(true); // Open role selection dialog for signup
+    } else {
+      // loginWithGoogle(); // Directly login for login page
+      setDialogOpen(false);
+      loginWithGoogle();
+    }
   };
 
   const handleRoleSelect = (role) => {

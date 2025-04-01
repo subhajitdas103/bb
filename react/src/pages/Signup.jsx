@@ -185,7 +185,7 @@ const SignUp = () => {
         </div>
 
         {/* Social Auth */}
-        <SocialAuth />
+        <SocialAuth isSignup={true}/>
       </div>
     </AuthLayout>
   );
